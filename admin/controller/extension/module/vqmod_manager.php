@@ -108,13 +108,13 @@ class ControllerExtensionModuleVQModManager extends Controller {
 		);
 
 		// Action Buttons
-		$data['action'] = $this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL');
-		$data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
-		$data['clear_log'] = $this->url->link('module/vqmod_manager/clear_log', 'token=' . $this->session->data['token'], 'SSL');
-		$data['clear_vqcache'] = $this->url->link('module/vqmod_manager/clear_vqcache', 'token=' . $this->session->data['token'], 'SSL');
-		$data['download_log'] = $this->url->link('module/vqmod_manager/download_log', 'token=' . $this->session->data['token'], 'SSL');
-		$data['download_scripts'] = $this->url->link('module/vqmod_manager/download_vqmod_scripts', 'token=' . $this->session->data['token'], 'SSL');
-		$data['download_vqcache'] = $this->url->link('module/vqmod_manager/download_vqcache', 'token=' . $this->session->data['token'], 'SSL');
+		$data['action'] = $this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL');
+		$data['cancel'] = $this->url->link('extension/extension/module', 'token=' . $this->session->data['token'], 'SSL');
+		$data['clear_log'] = $this->url->link('extension/module/vqmod_manager/clear_log', 'token=' . $this->session->data['token'], 'SSL');
+		$data['clear_vqcache'] = $this->url->link('extension/module/vqmod_manager/clear_vqcache', 'token=' . $this->session->data['token'], 'SSL');
+		$data['download_log'] = $this->url->link('extension/module/vqmod_manager/download_log', 'token=' . $this->session->data['token'], 'SSL');
+		$data['download_scripts'] = $this->url->link('extension/module/vqmod_manager/download_vqmod_scripts', 'token=' . $this->session->data['token'], 'SSL');
+		$data['download_vqcache'] = $this->url->link('extension/module/vqmod_manager/download_vqcache', 'token=' . $this->session->data['token'], 'SSL');
 
 		// Check ZipArchive for use with downloads
 		if (class_exists('ZipArchive')) {
@@ -143,12 +143,12 @@ class ControllerExtensionModuleVQModManager extends Controller {
 				if ($extension == 'xml_') {
 					$action[] = array(
 						'text' => $this->language->get('text_install'),
-						'href' => $this->url->link('module/vqmod_manager/vqmod_install', 'token=' . $this->session->data['token'] . '&vqmod=' . $file, 'SSL')
+						'href' => $this->url->link('extension/module/vqmod_manager/vqmod_install', 'token=' . $this->session->data['token'] . '&vqmod=' . $file, 'SSL')
 					);
 				} else {
 					$action[] = array(
 						'text' => $this->language->get('text_uninstall'),
-						'href' => $this->url->link('module/vqmod_manager/vqmod_uninstall', 'token=' . $this->session->data['token'] . '&vqmod=' . $file, 'SSL')
+						'href' => $this->url->link('extension/module/vqmod_manager/vqmod_uninstall', 'token=' . $this->session->data['token'] . '&vqmod=' . $file, 'SSL')
 					);
 				}
 
@@ -169,7 +169,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 					'vqmver'      => isset($xml->vqmver) ? $xml->vqmver : $this->language->get('text_unavailable'),
 					'author'      => isset($xml->author) ? $xml->author : $this->language->get('text_unavailable'),
 					'status'      => $extension == 'xml_' ? sprintf($this->language->get('highlight'), $this->language->get('text_disabled')) : $this->language->get('text_enabled'),
-					'delete'      => $this->url->link('module/vqmod_manager/vqmod_delete', 'token=' . $this->session->data['token'] . '&vqmod=' . basename($vqmod_script), 'SSL'),
+					'delete'      => $this->url->link('extension/module/vqmod_manager/vqmod_delete', 'token=' . $this->session->data['token'] . '&vqmod=' . basename($vqmod_script), 'SSL'),
 					'action'      => $action,
 					'invalid_xml' => $invalid_xml
 				);
@@ -328,7 +328,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 			}
 		}
 
-		$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	public function vqmod_uninstall() {
@@ -346,11 +346,11 @@ class ControllerExtensionModuleVQModManager extends Controller {
 			}
 		}
 
-		$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	public function vqmod_upload() {
-		$this->load->language('module/vqmod_manager');
+		$this->load->language('extension/module/vqmod_manager');
 
 		if ($this->userPermission()) {
 			$file = $this->request->files['vqmod_file']['tmp_name'];
@@ -404,7 +404,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 			}
 		}
 
-		$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	public function vqmod_delete() {
@@ -422,7 +422,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 			}
 		}
 
-		$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	public function clear_vqcache($return = false) {
@@ -448,7 +448,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 			$this->session->data['success'] = $this->language->get('success_clear_vqcache');
 		}
 
-		$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	public function clear_log() {
@@ -474,7 +474,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 			}
 		}
 
-		$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+		$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 	}
 
 	private function list_vqmod_scripts() {
@@ -502,7 +502,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 
 			$this->zip_send($targets, 'vqmod_scripts_backup');
 		} else {
-			$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 	}
 
@@ -516,7 +516,7 @@ class ControllerExtensionModuleVQModManager extends Controller {
 
 			$this->zip_send($targets, 'vqcache_dump');
 		} else {
-			$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 	}
 
@@ -534,13 +534,13 @@ class ControllerExtensionModuleVQModManager extends Controller {
 				$this->zip_send($targets, 'vqmod_log');
 			} else {
 				// No log available for download error
-				$this->load->language('module/vqmod_manager');
+				$this->load->language('extension/module/vqmod_manager');
 				$this->session->data['error'] = $this->language->get('error_log_download');
 
-				$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+				$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 			}
 		} else {
-			$this->response->redirect($this->url->link('module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 	}
 
@@ -674,9 +674,9 @@ class ControllerExtensionModuleVQModManager extends Controller {
 	}
 
 	private function userPermission($permission = 'modify') {
-		$this->load->language('module/vqmod_manager');
+		$this->load->language('extension/module/vqmod_manager');
 
-		if (!$this->user->hasPermission($permission, 'module/vqmod_manager')) {
+		if (!$this->user->hasPermission($permission, 'extension/module/vqmod_manager')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 			return false;
 		} else {
