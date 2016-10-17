@@ -80,6 +80,7 @@ class ControllerAccountSeller extends Controller {
         $data['text_loading'] = $this->language->get('text_loading');
 
         $data['entry_customer_group'] = $this->language->get('entry_customer_group');
+        $data['entry_username'] = $this->language->get('entry_username');
         $data['entry_firstname'] = $this->language->get('entry_firstname');
         $data['entry_lastname'] = $this->language->get('entry_lastname');
         $data['entry_email'] = $this->language->get('entry_email');
@@ -109,6 +110,12 @@ class ControllerAccountSeller extends Controller {
             $data['error_warning'] = $this->error['warning'];
         } else {
             $data['error_warning'] = '';
+        }
+
+        if (isset($this->error['username'])) {
+            $data['error_username'] = $this->error['username'];
+        } else {
+            $data['error_username'] = '';
         }
 
         if (isset($this->error['firstname'])) {
@@ -214,6 +221,12 @@ class ControllerAccountSeller extends Controller {
         }
 
         $data['action'] = $this->url->link('account/seller/register', '', true);
+
+        if (isset($this->request->post['username'])) {
+            $data['username'] = $this->request->post['username'];
+        } else {
+            $data['username'] = '';
+        }
 
         if (isset($this->request->post['firstname'])) {
             $data['firstname'] = $this->request->post['firstname'];

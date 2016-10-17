@@ -23,6 +23,15 @@
 <fieldset id="account">
 <legend><?php echo $text_your_details; ?></legend>
 <div class="form-group required">
+    <label class="col-sm-2 control-label" for="input-username"><?php echo $entry_username; ?></label>
+    <div class="col-sm-10">
+        <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
+        <?php if ($error_username) { ?>
+        <div class="text-danger"><?php echo $error_username; ?></div>
+        <?php } ?>
+    </div>
+</div>
+<div class="form-group required">
     <label class="col-sm-2 control-label" for="input-firstname"><?php echo $entry_firstname; ?></label>
     <div class="col-sm-10">
         <input type="text" name="firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_firstname; ?>" id="input-firstname" class="form-control" />
