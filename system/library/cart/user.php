@@ -39,7 +39,9 @@ class User {
 		$user_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user WHERE username = '" . $this->db->escape($username) . "' AND (password = SHA1(CONCAT(salt, SHA1(CONCAT(salt, SHA1('" . $this->db->escape(htmlspecialchars($password, ENT_QUOTES)) . "'))))) OR password = '" . $this->db->escape(md5($password)) . "') AND status = '1'");
 
 		if ($user_query->num_rows) {
+
 			$this->session->data['user_id'] = $user_query->row['user_id'];
+			$this->session->data['user_group_id'] = $user_query->row['user_group_id'];
 
 			$this->user_id = $user_query->row['user_id'];
 			$this->username = $user_query->row['username'];
@@ -91,4 +93,13 @@ class User {
 	public function getGroupId() {
 		return $this->user_group_id;
 	}
+
+    public function isSeller() {
+
+        if($this->user_group_id == '11')
+        {
+            return true;
+        }
+        return false;
+    }
 }
