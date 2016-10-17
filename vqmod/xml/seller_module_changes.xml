@@ -1,0 +1,36 @@
+<modification>
+    <id>Seller Module Changes</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!-- Removed the Notification Drop-down from Admin Page for Seller -->
+    <file name="admin/view/template/common/header.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"><?php if($alerts > 0) { ?><span class="label label-danger pull-left"><?php echo $alerts; ?></span><?php } ?> <i class="fa fa-bell fa-lg"></i></a>
+            ]]></search>
+            <add trim="true"><![CDATA[
+                <?php $styleStr = "";  if($is_seller) { $styleStr="style='display:none;'"; } ?><li class="dropdown" <?php echo $styleStr; ?> ><a class="dropdown-toggle" data-toggle="dropdown"><?php if($alerts > 0) { ?><span class="label label-danger pull-left"><?php echo $alerts; ?></span><?php } ?> <i class="fa fa-bell fa-lg"></i></a>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/header.php">
+        <operation>
+            <search position="before"><![CDATA[
+                // Online Stores
+            ]]></search>
+            <add trim="true"><![CDATA[
+                $data['is_seller'] = false;
+                if($this->user->isSeller())
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Removed the Notification Drop-down from Admin Page for Seller ENDS-->
+
+</modification>
