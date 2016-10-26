@@ -1,0 +1,53 @@
+<modification>
+    <id>Product Module Changes</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!-- Hide Fields/Tabs on Product Add/Edit Module [ADMIN] -->
+        <file name="admin/view/template/catalog/product_form.tpl">
+            <operation>
+                <search position="replace" offset="3"><![CDATA[
+                    <li><a href="#tab-option" data-toggle="tab"><?php echo $tab_option; ?></a></li>
+                ]]></search>
+                <add><![CDATA[
+
+                ]]></add>
+            </operation>
+
+            <operation>
+                <search position="replace" offset="1"><![CDATA[
+                    <li><a href="#tab-reward" data-toggle="tab"><?php echo $tab_reward; ?></a></li>
+                ]]></search>
+                <add><![CDATA[
+
+                ]]></add>
+            </operation>
+
+            <operation>
+                <search position="after"><![CDATA[
+                    //--></script></div>
+                ]]></search>
+                <add><![CDATA[
+                     <script type="text/javascript"><!--
+                        $(window).load(function() {
+
+                            // array of fields to not show
+                            var fields = ['input-sku','input-upc','input-ean','input-jan','input-isbn','input-mpn','input-location','input-tax-class','input-subtract','input-stock-status','input-sort-order','product-filter','input-meta-description1','input-meta-keyword1','input-tag1','input-manufacturer','product-related','product-download'];
+                            $.each(fields, function (index, value) {
+                                $('#'+value).parents('div.form-group').hide();
+                            });
+
+                            $('#input-name1').on('change', function() {
+                                $('#input-meta-title1').val($(this).val());
+                                $('#input-model').val($(this).val());
+                            });
+                        });
+                    //--></script>
+                ]]></add>
+            </operation>
+        </file>
+    <!-- Hide Fields/Tabs on Product Add/Edit Module [ADMIN] ENDS -->
+
+</modification>
