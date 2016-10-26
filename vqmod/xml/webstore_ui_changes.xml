@@ -1,0 +1,138 @@
+<modification>
+    <id>UI Changes to Storefront</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>rohit@rohitbatra.in</author>
+
+    <!-- Header/Footer Changes -->
+    <file name="catalog/view/theme/default/template/common/header.tpl">
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                <li><a href="<?php echo $wishlist; ?>" id="wishlist-total" title="<?php echo $text_wishlist; ?>"><i class="fa fa-heart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $text_wishlist; ?></span></a></li>
+            ]]></search>
+            <add> <![CDATA[
+
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/default/template/common/footer.tpl">
+
+        <operation error="log">
+            <search position="replace" offset="1"><![CDATA[
+                <li><a href="<?php echo $return; ?>"><?php echo $text_return; ?></a></li>
+            ]]></search>
+            <add> <![CDATA[
+
+            ]]></add>
+        </operation>
+        <operation error="log">
+            <search position="after"><![CDATA[
+                <li><a href="<?php echo $contact; ?>"><?php echo $text_contact; ?></a></li>
+            ]]></search>
+            <add> <![CDATA[
+            <?php if(isset($become_seller))
+                { ?>
+                <li><a href="<?php echo $become_seller; ?>"><?php echo $text_become_seller; ?></a></li>
+            <?php } ?>
+            ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace" index="3"><![CDATA[
+                <div class="col-sm-3">
+            ]]></search>
+            <add><![CDATA[
+                <div class="col-sm-3 hidden">
+            ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                <div class="col-sm-3">
+            ]]></search>
+            <add><![CDATA[
+                <div class="col-sm-4">
+            ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace" offset="2"><![CDATA[
+                <li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>
+            ]]></search>
+            <add><![CDATA[
+
+            ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                <li><a href="<?php echo $account; ?>"><?php echo $text_account; ?></a></li>
+            ]]></search>
+            <add><![CDATA[
+                <li><a href="<?php echo $customer; ?>"><?php echo $text_customer; ?></a></li>
+                <?php if(isset($seller))
+                { ?>
+                    <li><a href="<?php echo $seller; ?>"><?php echo $text_seller; ?></a></li>
+                <?php } ?>
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/language/en-gb/common/footer.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $_['text_account']      = 'My Account';
+            ]]></search>
+            <add><![CDATA[
+                $_['text_become_seller']      = 'Become A Seller';
+                $_['text_customer']      = 'Customer';
+                $_['text_seller']      = 'Seller';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/common/footer.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $data['text_account'] = $this->language->get('text_account');
+            ]]></search>
+            <add><![CDATA[
+                $data['text_become_seller'] = $this->language->get('text_become_seller');
+                $data['text_customer'] = $this->language->get('text_customer');
+                $data['text_seller'] = $this->language->get('text_seller');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+                $data['account'] = $this->url->link('account/account', '', true);
+            ]]></search>
+            <add><![CDATA[
+                $data['customer'] = $this->url->link('account/account', '', true);
+                if (!$this->customer->isLogged()) {
+                    $data['seller'] = $this->url->link('account/seller', '', true);
+                    $data['become_seller'] = $this->url->link('account/seller', '', true);
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Header/Footer Changes ENDS-->
+
+    <!-- Cart Module Changes -->
+    <file name="catalog/view/theme/default/template/checkout/cart.tpl">
+        <operation>
+            <search position="replace" offset="9"><![CDATA[
+                <?php if ($modules) { ?>
+            ]]></search>
+            <add><![CDATA[
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- Cart Module Changes ENDS-->
+
+</modification>

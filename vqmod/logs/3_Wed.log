@@ -1,0 +1,45 @@
+---------- Date: 2016-10-26 13:49:52 ~ IP : 127.0.0.1 ----------
+REQUEST URI : /index.php?route=common/home
+MOD DETAILS:
+   modFile   : C:\xampp\htdocs\cad-commerce\cad-commerce\vqmod/xml/webstore_ui_changes.xml
+   id        : UI Changes to Storefront
+   version   : 1.0.0
+   vqmver    : 2.1.5
+   author    : rohit@rohitbatra.in
+
+File Name    : catalog/view/theme/default/template/common/footer.tpl(0)
+VQModObject::applyMod - SEARCH NOT FOUND (SKIPPED): <li><a href="<?php echo $wishlist; ?>" id="wishlist-total" title="<?php echo $text_wishlist; ?>"><i class="fa fa-heart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $text_wishlist; ?></span></a></li>
+
+----------------------------------------------------------------------
+
+
+---------- Date: 2016-10-26 14:15:23 ~ IP : 127.0.0.1 ----------
+REQUEST URI : /index.php?route=common/home
+MOD DETAILS:
+   modFile   : C:\xampp\htdocs\cad-commerce\cad-commerce\vqmod/xml/webstore_ui_changes.xml
+   id        : UI Changes to Storefront
+   version   : 1.0.0
+   vqmver    : 2.1.5
+   author    : rohit@rohitbatra.in
+
+File Name    : catalog/view/theme/default/template/common/footer.tpl(1)
+VQModObject::applyMod - SEARCH NOT FOUND (SKIPPED): <li><a href="<?php echo $return; ?>"><?php echo $text_return; ?></a></li>
+
+----------------------------------------------------------------------
+
+
+---------- Date: 2016-10-26 14:16:08 ~ IP : 127.0.0.1 ----------
+REQUEST URI : /index.php?route=common/home
+MOD DETAILS:
+   modFile   : C:\xampp\htdocs\cad-commerce\cad-commerce\vqmod/xml/webstore_ui_changes.xml
+   id        : UI Changes to Storefront
+   version   : 1.0.0
+   vqmver    : 2.1.5
+   author    : rohit@rohitbatra.in
+
+File Name    : catalog/view/theme/default/template/common/footer.tpl(1)
+VQModObject::applyMod - SEARCH NOT FOUND (SKIPPED): <li><a href="<?php echo $return; ?>"><?php echo $text_return; ?></a></li>
+
+----------------------------------------------------------------------
+
+
