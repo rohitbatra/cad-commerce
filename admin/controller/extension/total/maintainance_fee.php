@@ -28,7 +28,7 @@
             $data['entry_tax_class'] = $this->language->get('entry_tax_class');
             $data['entry_status'] = $this->language->get('entry_status');
             $data['entry_sort_order'] = $this->language->get('entry_sort_order');
-            
+
             $data['button_save'] = $this->language->get('button_save');
             $data['button_cancel'] = $this->language->get('button_cancel');
 
@@ -59,10 +59,10 @@
 
             $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=total', true);
 
-            if (isset($this->request->post['maintainance_fee_fee'])) {
-                $data['maintainance_fee_fee'] = $this->request->post['maintainance_fee_fee'];
+            if (isset($this->request->post['maintainance_fee'])) {
+                $data['maintainance_fee'] = $this->request->post['maintainance_fee'];
             } else {
-                $data['maintainance_fee_fee'] = $this->config->get('maintainance_fee_fee');
+                $data['maintainance_fee'] = $this->config->get('maintainance_fee');
             }
 
             if (isset($this->request->post['maintainance_fee_tax_class_id'])) {
