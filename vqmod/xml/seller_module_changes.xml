@@ -279,7 +279,7 @@
               <div class="col-md-4">
             ]]></search>
             <add><![CDATA[
-            <div class="col-md-4 hidden">
+            <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
             ]]></add>
         </operation>
 
@@ -288,7 +288,7 @@
               <table class="table table-bordered">
             ]]></search>
             <add><![CDATA[
-              <table class="table table-bordered hidden">
+              <table class="table table-bordered <?php if($is_seller) { ?> hidden <?php } ?>">
             ]]></add>
         </operation>
     </file>
