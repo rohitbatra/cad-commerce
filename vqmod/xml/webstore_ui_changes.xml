@@ -223,6 +223,20 @@
         </operation>
     </file>
 
+    <file name="catalog/controller/checkout/payment_method.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                $this->session->data['comment'] = strip_tags($this->request->post['comment']);
+            ]]></search>
+            <add><![CDATA[
+                if(isset($this->request->post['comment']))
+                {
+                    $this->session->data['comment'] = strip_tags($this->request->post['comment']);
+                }
+            ]]></add>
+        </operation>
+    </file>
+
     <!-- Remove Comments from Payment Method (Checkout Page) ENDS-->
 
 </modification>
