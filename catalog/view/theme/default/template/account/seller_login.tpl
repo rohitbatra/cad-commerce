@@ -228,7 +228,7 @@
                 function()
                 {
                     //do something special
-                    $(location).attr('href', 'http://cad.ergoasia.com/admin/');
+                    $(location).attr('href', '<?php echo HTTP_SERVER; ?>admin/');
                 }, 2000);
     });
 </script>

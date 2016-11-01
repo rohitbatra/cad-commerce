@@ -63,3 +63,33 @@ $_['error_bank_branch']   = 'Bank Branch Name is required!';
 $_['error_account_number']   = 'Bank Account Name is required!';
 $_['error_payee_name']   = 'Account Holder Name is required!';
 $_['error_ifsc_code']   = 'IFSC Code is required!';
+
+
+// Seller Splash Page
+
+// Heading
+$_['splash_heading_title']                = 'Seller Login';
+
+// Text
+$_['text_account']                 = 'Account';
+$_['text_login']                   = 'Login';
+$_['text_new_customer']            = 'New Seller';
+$_['text_register']                = 'Register Account';
+$_['text_register_account']        = 'By creating an account you will be able to sell your products on this webstore. If any doubts/issues please write to us at <a href="mailto:support@sezplus.com">support@sezplus.com</a>';
+$_['text_returning_account']        = 'Are you a Registered Seller with us? Then use the below button to Log-in.';
+$_['text_returning_customer']      = 'Registered Seller';
+$_['text_i_am_returning_customer'] = '';
+$_['text_forgotten']               = 'Forgotten Password';
+
+// Entry
+$_['entry_email']                  = 'E-Mail Address';
+$_['entry_password']               = 'Password';
+
+// Error
+$_['error_login']                  = 'Warning: No match for E-Mail Address and/or Password.';
+$_['error_attempts']               = 'Warning: Your account has exceeded allowed number of login attempts. Please try again in 1 hour.';
+$_['error_approved']               = 'Warning: Your account requires approval before you can login.';
+
+// Buttons
+    $_['button_register']        = 'Register Now';
+    $_['button_login']        = 'Take me to Login';
