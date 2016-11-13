@@ -8,8 +8,8 @@
     <!-- Hide Fields/Tabs on Product Add/Edit Module [ADMIN] -->
         <file name="admin/view/template/catalog/product_form.tpl">
             <operation>
-                <search position="replace" offset="3"><![CDATA[
-                    <li><a href="#tab-option" data-toggle="tab"><?php echo $tab_option; ?></a></li>
+                <search position="replace" offset="4"><![CDATA[
+                    <li><a href="#tab-attribute" data-toggle="tab"><?php echo $tab_attribute; ?></a></li>
                 ]]></search>
                 <add><![CDATA[
 
@@ -34,10 +34,21 @@
                         $(window).load(function() {
 
                             // array of fields to not show
-                            var fields = ['input-sku','input-upc','input-ean','input-jan','input-isbn','input-mpn','input-location','input-tax-class','input-subtract','input-stock-status','input-sort-order','product-filter','input-meta-description1','input-meta-keyword1','input-tag1','input-manufacturer','product-related','product-download'];
+                            var fields = ['input-model','input-quantity','input-minimum','input-weight','input-weight-class','input-sku','input-upc','input-ean','input-jan','input-isbn','input-mpn','input-location','input-tax-class','input-subtract','input-stock-status','input-sort-order','product-filter','input-meta-description1','input-meta-keyword1','input-tag1','input-manufacturer','product-related'];
                             $.each(fields, function (index, value) {
                                 $('#'+value).parents('div.form-group').hide();
                             });
+
+                            // No Id field & Default Model Value
+                            $('input:radio[name="shipping"]').parents('div.form-group').hide();
+                            $('input:radio[name="shipping"][value="0"]').prop('checked','checked');
+                            $('#input-model').val("<?php echo time(); ?>");
+
+                            // Auto-Populate No. Of Parts field in-case of EDIT
+                            <?php if(!empty($tone_count)) { ?>
+                                $('#input-tone-count').val('<?php echo $tone_count; ?>');
+                            <?php } ?>
+
 
                             $('#input-name1').on('change', function() {
                                 $('#input-meta-title1').val($(this).val());
@@ -47,7 +58,225 @@
                     //--></script>
                 ]]></add>
             </operation>
+            <!-- Hide Fields/Tabs on Product Add/Edit Module [ADMIN] ENDS -->
+
+            <!-- Additional Fields for Product Module -->
+            <operation>
+                <search position="before"><![CDATA[
+                    <label class="col-sm-2 control-label" for="input-weight"><?php echo $entry_weight; ?></label>
+                ]]></search>
+                <add><![CDATA[
+                    <label class="col-sm-2 control-label" for="input-gold-weight"><?php echo $entry_gold_weight; ?></label>
+                    <div class="col-sm-10">
+                      <input type="text" name="gold_weight" value="<?php echo $gold_weight; ?>" placeholder="<?php echo $entry_gold_weight; ?>" id="input-gold-weight" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-silver-weight"><?php echo $entry_silver_weight; ?></label>
+                    <div class="col-sm-10">
+                      <input type="text" name="silver_weight" value="<?php echo $silver_weight; ?>" placeholder="<?php echo $entry_silver_weight; ?>" id="input-silver-weight" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-diamond-weight"><?php echo $entry_diamond_weight; ?></label>
+                    <div class="col-sm-10">
+                      <input type="text" name="diamond_weight" value="<?php echo $diamond_weight; ?>" placeholder="<?php echo $entry_diamond_weight; ?>" id="input-diamond-weight" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-parts-count"><?php echo $entry_parts_count; ?></label>
+                    <div class="col-sm-10">
+                      <input type="text" name="parts_count" value="<?php echo $parts_count; ?>" placeholder="<?php echo $entry_parts_count; ?>" id="input-parts-count" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-tone-count"><?php echo $entry_tone_count; ?></label>
+                    <div class="col-sm-10">
+                      <select name="tone_count" id="input-tone-count" class="form-control">
+                        <option value="one_tone"><?php echo 'One Tone'; ?></option>
+                        <option value="two_tone"><?php echo 'Two Tone'; ?></option>
+                        <option value="three_tone"><?php echo 'Three Tone'; ?></option>
+                        <option value="four_tone"><?php echo 'Four Tone'; ?></option>
+                    </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+
+                ]]></add>
+            </operation>
+
+            <!-- Making Category Compulsory -->
+            <operation>
+                <search position="replace" offset="-1"><![CDATA[
+                <label class="col-sm-2 control-label" for="input-category"><span data-toggle="tooltip" title="<?php echo $help_category; ?>"><?php echo $entry_category; ?></span></label>
+                ]]></search>
+                <add><![CDATA[
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="input-category"><span data-toggle="tooltip" title="<?php echo $help_category; ?>"><?php echo $entry_category; ?></span></label>
+
+                ]]></add>
+            </operation>
+
+            <operation>
+                <search position="replace" offset="3"><![CDATA[
+                <input type="hidden" name="product_category[]" value="<?php echo $product_category['category_id']; ?>" />
+                ]]></search>
+                <add><![CDATA[
+                    <input type="hidden" name="product_category[]" value="<?php echo $product_category['category_id']; ?>" />
+                    </div>
+                    <?php } ?>
+                  </div>
+
+                <?php if ($error_product_category) { ?>
+                  <div class="text-danger"><?php echo $error_product_category; ?></div>
+                  <?php } ?>
+                ]]></add>
+            </operation>
+            <!-- Making Category Compulsory ENDS-->
         </file>
-    <!-- Hide Fields/Tabs on Product Add/Edit Module [ADMIN] ENDS -->
+
+        <file name="admin/language/en-gb/catalog/product.php">
+            <operation>
+                <search position="before"><![CDATA[
+                    $_['entry_description']      = 'Description';
+                ]]></search>
+                <add><![CDATA[
+                    $_['entry_tone_count']      = 'Tone Like';
+                    $_['entry_parts_count']      = 'No. Of Parts';
+                    $_['entry_diamond_weight']      = 'Diamond Wt. (Carats)';
+                    $_['entry_silver_weight']      = 'Silver Weight (in Gms)';
+                    $_['entry_gold_weight']      = 'Gold Weight (in Gms)';
+
+                ]]></add>
+            </operation>
+            <!-- Making Category Compulsory -->
+            <operation>
+                <search position="before"><![CDATA[
+                $_['error_model']            = 'Product Model must be greater than 1 and less than 64 characters!';
+                ]]></search>
+                <add><![CDATA[
+                   $_['error_product_category']            = 'Please select at-least one category for your Product!';
+                ]]></add>
+            </operation>
+            <!-- Making Category Compulsory ENDS-->
+
+        </file>
+
+        <file name="admin/controller/catalog/product.php">
+            <operation>
+                <search position="before"><![CDATA[
+                $data['entry_sku'] = $this->language->get('entry_sku');
+                ]]></search>
+                <add><![CDATA[
+                $data['entry_tone_count'] = $this->language->get('entry_tone_count');
+                $data['entry_parts_count'] = $this->language->get('entry_parts_count');
+                $data['entry_diamond_weight'] = $this->language->get('entry_diamond_weight');
+                $data['entry_silver_weight'] = $this->language->get('entry_silver_weight');
+                $data['entry_gold_weight'] = $this->language->get('entry_gold_weight');
+                $data['error_product_category'] = $this->language->get('error_product_category');
+                ]]></add>
+            </operation>
+
+            <operation>
+                <search position="before"><![CDATA[
+                    if (isset($this->request->post['height'])) {
+                ]]></search>
+                <add><![CDATA[
+                    // Parts Count
+                    if (isset($this->request->post['parts_count'])) {
+                        $data['parts_count'] = $this->request->post['parts_count'];
+                    } elseif (!empty($product_info)) {
+                        $data['parts_count'] = $product_info['parts_count'];
+                    } else {
+                        $data['parts_count'] = '';
+                    }
+                    // Diamond Wt
+                    if (isset($this->request->post['diamond_weight'])) {
+                        $data['diamond_weight'] = $this->request->post['diamond_weight'];
+                    } elseif (!empty($product_info)) {
+                        $data['diamond_weight'] = $product_info['diamond_weight'];
+                    } else {
+                        $data['diamond_weight'] = '';
+                    }
+                    // Gold Wt
+                    if (isset($this->request->post['gold_weight'])) {
+                        $data['gold_weight'] = $this->request->post['gold_weight'];
+                    } elseif (!empty($product_info)) {
+                        $data['gold_weight'] = $product_info['gold_weight'];
+                    } else {
+                        $data['gold_weight'] = '';
+                    }
+                    // Silver Wt
+                    if (isset($this->request->post['silver_weight'])) {
+                        $data['silver_weight'] = $this->request->post['silver_weight'];
+                    } elseif (!empty($product_info)) {
+                        $data['silver_weight'] = $product_info['silver_weight'];
+                    } else {
+                        $data['silver_weight'] = '';
+                    }
+                    // Tone Count
+                    if (isset($this->request->post['tone_count'])) {
+                        $data['tone_count'] = $this->request->post['tone_count'];
+                    } elseif (!empty($product_info)) {
+                        $data['tone_count'] = $product_info['tone_count'];
+                    } else {
+                        $data['tone_count'] = '';
+                    }
+                ]]></add>
+            </operation>
+
+            <!-- Making Category Compulsory -->
+
+            <operation>
+                <search position="before"><![CDATA[
+                    if ((utf8_strlen($this->request->post['model']) < 1) || (utf8_strlen($this->request->post['model']) > 64)) {
+                ]]></search>
+                <add><![CDATA[
+                      if(!isset($this->request->post['product_category']))
+                      {
+                          $this->error['product_category'] = $this->language->get('error_product_category');
+
+                      }else{
+
+                      if(!empty($this->request->post['product_category']))
+                        {
+                            foreach($this->request->post['product_category'] as $category_id)
+                            {
+                                if (empty($category_id)) {
+                                    $this->error['product_category'] = $this->language->get('error_product_category');
+                                }
+                            }
+                        }
+                    }
+                ]]></add>
+            </operation>
+            <operation>
+                <search position="before"><![CDATA[
+                    if (isset($this->error['name'])) {
+                ]]></search>
+                <add><![CDATA[
+                if (isset($this->error['product_category'])) {
+                    $data['error_product_category'] = $this->error['product_category'];
+                } else {
+                    $data['error_product_category'] = '';
+                }
+                ]]></add>
+            </operation>
+            <!-- Making Category Compulsory ENDS-->
+
+        </file>
+
+        <file name="admin/model/catalog/product.php">
+            <operation>
+                <search position="replace"><![CDATA[
+                    sku = '" . $this->db->escape($data['sku']) . "'
+                ]]></search>
+                <add><![CDATA[
+                    sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "'
+                ]]></add>
+            </operation>
+        </file>
+    <!-- Additional Fields for Product Module ENDS-->
 
 </modification>
