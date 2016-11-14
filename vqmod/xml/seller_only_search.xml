@@ -1,0 +1,94 @@
+<modification>
+    <id>Seller AutoComplete Restrictions</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>rohit@rohitbatra.in</author>
+
+    <!-- Image Upload Box Restrictions -->
+    <file name="admin/model/tool/image.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[
+			    public function resize($filename, $width, $height) {
+			]]></search>
+            <add><![CDATA[
+			    public function getImages($seller_id) {
+
+                    $res = $this->db->query("SELECT * FROM `image` WHERE user_id = '{$seller_id}' ;");
+                    return $res->rows;
+			    }
+
+			    public function addImages($data) {
+
+			        $this->db->query("INSERT into `image` (image_path,name,size,user_id) VALUES ('".$this->db->escape(urlencode($data['filepath']))."','".$this->db->escape($data['filename'])."','{$data['size']}','{$data['user_id']}') ;");
+
+			    }
+			]]></add>
+        </operation>
+    </file>
+
+
+    <file name="admin/controller/common/filemanager.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
+            ]]></search>
+            <add><![CDATA[
+                $res = move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
+                if($res !== false)
+                {
+                    $this->load->model('tool/image');
+                    // Add this Image to DB Table
+                    $user_id = $this->user->getId();
+                    if($this->user->isSeller())
+                    {
+                        // Seller Uploads
+                        $this->model_tool_image->addImages(array('filepath' => ($directory . '/' . $filename), 'filename' => $file['name'], 'size' => $file['size'], 'user_id' => $user_id ));
+                    }else{
+                        // Admin Uploads
+                        //$this->model_tool_image->addImages(array('filepath' => ($directory . '/' . $filename), 'filename' => $file['name'], 'size' => $file['size'], 'user_id' => $user_id ));
+
+                    }
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                $images = array_merge($directories, $files);
+            ]]></search>
+            <add><![CDATA[
+                $data['user_type'] = "admin";
+                if($this->user->isSeller())
+                {
+                    $data['user_type'] = 'seller';
+                    $this->load->model('tool/image');
+                    $user_id = $this->user->getId();
+                    $imagez = $this->model_tool_image->getImages($user_id);
+                    $images = array();
+                    foreach($imagez as $image)
+                    {
+                        $images[] = urldecode($image['image_path']);
+                    }
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+
+    <file name="admin/view/template/common/filemanager.tpl">
+        <operation error="log">
+            <search position="replace" offset="1"><![CDATA[
+          <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
+            ]]></search>
+            <add><![CDATA[
+                <?php if($user_type !== "seller") { ?>
+                    <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
+                    <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" id="button-delete" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                <?php } ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Image Upload Box Restrictions ENDS-->
+
+</modification>
