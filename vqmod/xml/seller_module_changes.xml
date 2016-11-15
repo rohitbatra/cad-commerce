@@ -169,7 +169,7 @@
                             $(window).load(function() {
 
                                 // array of fields to not show
-                                var fields = ['input-customer','input-date-modified'];
+                                var fields = ['input-customer','input-date-modified','input-total'];
                                 $.each(fields, function (index, value) {
                                     $('#'+value).parents('div.form-group').hide();
                                 });
@@ -177,6 +177,14 @@
                             });
                         //--></script>
                     <?php } ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                <td class="text-right"><?php echo $order['total']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+                <td class="text-right"><?php echo (($is_seller) ? '****' : $order['total']); ?></td>
             ]]></add>
         </operation>
     </file>
@@ -496,5 +504,33 @@
 
     <!-- Change Label 'Downloads' in Admin panel to 'Upload Files' ENDS-->
 
+
+    <!-- Hide Extra Fees from Seller Sales Order View -->
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $totals = $this->model_sale_order->getOrderTotals($this->request->get['order_id']);
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $tmpTotal = $totals;
+                    $totals = array();
+                    foreach($tmpTotal as $total)
+                    {
+                        if($total['code'] == 'sub_total')
+                        {
+                            $total['code'] = 'total';
+                            $total['title'] = 'Total';
+                            $total['text'] = 'Total';
+
+                            $totals[] = $total;
+                        }
+                    }
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Hide Extra Fees from Seller Sales Order View ENDS-->
 
 </modification>
