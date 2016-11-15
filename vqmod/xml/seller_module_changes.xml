@@ -91,19 +91,19 @@
             ]]></search>
 
             <add><![CDATA[
-                    <?php if($is_seller) { ?>
+                    <?php /* if($is_seller) { */ ?>
                          <script type="text/javascript"><!--
                             $(window).load(function() {
 
                                 // array of fields to not show
-                                var fields = ['input-status','input-quantity','input-image'];
+                                var fields = ['input-status','input-quantity','input-image','input-model'];
                                 $.each(fields, function (index, value) {
                                     $('#'+value).parents('div.form-group').hide();
                                 });
 
                             });
                         //--></script>
-                    <?php } ?>
+                    <?php /* } */ ?>
             ]]></add>
         </operation>
     </file>
