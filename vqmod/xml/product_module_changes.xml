@@ -142,7 +142,7 @@
                     $_['entry_description']      = 'Description';
                 ]]></search>
                 <add><![CDATA[
-                    $_['entry_tone_count']      = 'Tone Like';
+                    $_['entry_tone_count']      = 'Tone';
                     $_['entry_parts_count']      = 'No. Of Parts';
                     $_['entry_diamond_weight']      = 'Diamond Wt. (Carats)';
                     $_['entry_silver_weight']      = 'Silver Weight (in Gms)';
