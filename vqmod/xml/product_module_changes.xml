@@ -276,6 +276,30 @@
                     sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "'
                 ]]></add>
             </operation>
+
+            <operation>
+                <search position="after"><![CDATA[
+                    $product_id = $this->db->getLastId();
+                ]]></search>
+                <add><![CDATA[
+                    if($this->user->isSeller())
+                    {
+                        $this->db->query("UPDATE " . DB_PREFIX . "product  SET seller_id = '".$this->user->getId()."' WHERE product_id = '{$product_id}' ");
+                    }
+                ]]></add>
+            </operation>
+
+            <operation>
+                <search position="after"><![CDATA[
+                    public function editProduct($product_id, $data) {
+                ]]></search>
+                <add><![CDATA[
+                    if($this->user->isSeller())
+                    {
+                        $this->db->query("UPDATE " . DB_PREFIX . "product  SET seller_id = '".$this->user->getId()."' WHERE product_id = '{$product_id}' ");
+                    }
+                ]]></add>
+            </operation>
         </file>
     <!-- Additional Fields for Product Module ENDS-->
 
