@@ -1,6 +1,11 @@
-<?php include('Crypto.php')?>
+<html>
+<head>
+	<title> Receiving From Payment Gateway (CCAvenue) </title>
+</head>
+<body>
+<center>
 <?php
-
+	require_once('Crypto.php');
 	error_reporting(0);
 	
 	$workingKey='E90DEFBC38BE1D13F737925FDADD197D';		//Working Key should be provided here.
@@ -19,17 +24,17 @@
 
 	if($order_status==="Success")
 	{
-		echo "<br>Thank you for shopping with us. Your credit card has been charged and your transaction is successful. We will be shipping your order to you soon.";
+		echo "<br>Thank you! Your transaction is successful. We will be redirecting you...";
 		
 	}
 	else if($order_status==="Aborted")
 	{
-		echo "<br>Thank you for shopping with us.We will keep you posted regarding the status of your order through e-mail";
+		echo "<br>There was some issue with the Transaction. We will track it manually & keep you posted via email. In any case you can write to us at support@sezplus.com";
 	
 	}
 	else if($order_status==="Failure")
 	{
-		echo "<br>Thank you for shopping with us.However,the transaction has been declined.";
+		echo "<br>The Transaction has been declined.";
 	}
 	else
 	{
@@ -39,13 +44,27 @@
 
 	echo "<br><br>";
 
-	echo "<table cellspacing=4 cellpadding=4>";
-	for($i = 0; $i < $dataSize; $i++) 
+	// Create a POST request with all Variables Received.
+
+	$postArr = array('orderNo'=>$_POST['orderNo']);
+	for($i = 0; $i < $dataSize; $i++)
 	{
 		$information=explode('=',$decryptValues[$i]);
-	    	echo '<tr><td>'.$information[0].'</td><td>'.urldecode($information[1]).'</td></tr>';
+		$postArr[$information[0]] = urldecode($information[1]);
 	}
 
-	echo "</table><br>";
 	echo "</center>";
 ?>
+<form method="post" name="redirect" action="http://www.sezplus.com/cad/index.php?route=account/seller/success">
+<?php
+	foreach ($postArr as $var => $val)
+	{
+		echo "<input type=hidden name='{$var}' value='{$val}'>";
+	}
+
+?>
+	</form>
+</center>
+<script language='javascript'>document.redirect.submit();</script>
+</body>
+</html>

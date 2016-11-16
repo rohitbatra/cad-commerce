@@ -91,5 +91,5 @@ $_['error_attempts']               = 'Warning: Your account has exceeded allowed
 $_['error_approved']               = 'Warning: Your account requires approval before you can login.';
 
 // Buttons
-    $_['button_register']        = 'Register Now';
-    $_['button_login']        = 'Take me to Login';
+$_['button_register']        = 'Register Now';
+$_['button_login']        = 'Take me to Login';

@@ -245,10 +245,10 @@
     <input type="text" name="tid" id="tid" value="<?php echo strtotime(date('d-m-Y h:m:s')) ?>" readonly />
     <input type="text" name="merchant_id" value="93868"/>
     <input type="text" name="order_id" value=""/>
-    <input type="text" name="amount" value="500.00"/>
+    <input type="text" name="amount" value="1.00"/>
     <input type="text" name="currency" value="INR"/>
-    <input type="text" name="redirect_url" value="http://www.sezplus.com/plans-pricing-return/"/>
-    <input type="text" name="cancel_url" value="http://www.sezplus.com/find-a-job/"/>
+    <input type="text" name="redirect_url" value="http://www.sezplus.com/cad/ccavenue/ccavResponseHandler.php"/>
+    <input type="text" name="cancel_url" value="http://www.sezplus.com/cad/index.php?route=account/seller/register"/>
     <input type="text" name="language" value="EN"/>
 </form>
 
@@ -323,7 +323,8 @@
                 // First Register the User in System
                 var seller_id = registerUser();
 
-                if($.isNumeric(seller_id)) {
+                if($.isNumeric(seller_id))
+                {
                     // Now Redirect to Payment Processor Page with another Hidden Form Fields
                     $('input[name="order_id"]').val("SEZCAD" + seller_id);
                     $("form[name='customerData']").submit();
