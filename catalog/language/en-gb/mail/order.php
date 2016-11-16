@@ -32,4 +32,5 @@ $_['text_update_date_added']    = 'Date Ordered:';
 $_['text_update_order_status']  = 'Your order has been updated to the following status:';
 $_['text_update_comment']       = 'The comments for your order are:';
 $_['text_update_link']          = 'To view your order click on the link below:';
-$_['text_update_footer']        = 'Please reply to this email if you have any questions.';
+//$_['text_update_footer']        = 'Please reply to this email if you haveany questions.';
+$_['text_update_footer']        = 'This is a computer generated Bill, it does not require any Signatures/Stamp. Please do not reply to this email, If you have any questions or queries please email us at <a href="mailto:support@sezplus.com">support@sezplus.com</a>';
