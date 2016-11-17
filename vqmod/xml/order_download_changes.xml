@@ -17,7 +17,7 @@
                 ]]>
             </search>
             <add><![CDATA[
-                'download' => $remote_url,
+                'download' => $download_url,
             ]]></add>
 
         </operation>
@@ -30,8 +30,10 @@
                 ]]>
             </search>
             <add><![CDATA[
-                    $order_download_query = $this->db->query("SELECT d.remote_url as remote_url FROM order_product AS op LEFT OUTER JOIN product_to_download ptd ON (op.product_id = ptd.product_id) LEFT OUTER JOIN download d ON (d.download_id = ptd.download_id) WHERE op.order_id = '".(int)$order_id."' AND ptd.product_id = '".$product['product_id']."' LIMIT 1;");
-                    $remote_url = $order_download_query->row['remote_url'];
+                    $order_download_query = $this->db->query("SELECT d.download_id as download_id FROM order_product AS op LEFT OUTER JOIN product_to_download ptd ON (op.product_id = ptd.product_id) LEFT OUTER JOIN download d ON (d.download_id = ptd.download_id) WHERE op.order_id = '".(int)$order_id."' AND ptd.product_id = '".$product['product_id']."' LIMIT 1;");
+                    $download_id = $order_download_query->row['download_id'];
+                    $download_url = $this->url->link('account/download/download', 'download_id=' . $download_id, true)
+
             ]]></add>
 
         </operation>
