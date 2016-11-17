@@ -72,58 +72,72 @@ class ControllerExtensionpaymentccavenue extends Controller {
 	}
 	
 	
-	public function callback() {
-		
+	public function callback()
+	{
+
 		$this->load->model('checkout/order');
-		
+
 		$workingKey=$this->config->get('ccavenue_workingkey');
 		if(isset($_POST["encResp"]))
 		{
-		$encResponse=$_POST["encResp"];
-		
-		$rcvdString=decrypt($encResponse,$workingKey);
-		$order_status="";
-		$decryptValues=explode('&', $rcvdString);
-		$dataSize=sizeof($decryptValues);
-		
-		for($i = 0; $i < $dataSize; $i++) 
-		{
-			$information=explode('=',$decryptValues[$i]);
-			if($i==3)	$order_status=$information[1];
-		}
-		
-		$orderid=explode('=',$decryptValues[0]);
-		
-		$order_info = $this->model_checkout_order->getOrder($orderid['1']);
-		if ($order_info) {
-					if($order_status==="Success")
-					{
-					$order_status_id = $this->config->get('ccavenue_completed_status_id');
-					}
-					else if($order_status==="Failure")
-					{
-					$order_status_id = $this->config->get('ccavenue_failed_status_id');
-					}
-					else if($order_status==="Aborted")
-					{
-					$order_status_id = $this->config->get('ccavenue_pending_status_id');
-					}
-					
-				
-					$this->model_checkout_order->addOrderHistory($order_info['order_id'], $order_status_id);
-				
-				$this->response->redirect($this->url->link('checkout/success', '', 'SSL'));
-				
-				
-			} }else
+			$encResponse=$_POST["encResp"];
+
+			$rcvdString=decrypt($encResponse,$workingKey);
+			$order_status="";
+			$decryptValues=explode('&', $rcvdString);
+			$dataSize=sizeof($decryptValues);
+
+
+			for($i = 0; $i < $dataSize; $i++)
 			{
+				$information=explode('=',$decryptValues[$i]);
+
+				if($information[0] === 'order_status')
+				{
+					$order_status = trim($information[1]);
+				}
+
+				if($information[0] === 'order_id')
+				{
+					$orderid = trim($information[1]);
+				}
+
+				$pstData[$information[0]] = trim($information[1]);
+			}
+
+			$order_info = $this->model_checkout_order->getOrder($orderid);
+
+			if ($order_info)
+			{
+				if($order_status==="Success")
+				{
+					$order_status_id = $this->config->get('ccavenue_completed_status_id');
+				}
+				else if($order_status==="Failure")
+				{
+					$order_status_id = $this->config->get('ccavenue_failed_status_id');
+				}
+				else if($order_status==="Aborted")
+				{
+					$order_status_id = $this->config->get('ccavenue_pending_status_id');
+				}
+
+				$this->model_checkout_order->addOrderHistory($order_info['order_id'], $order_status_id);
+
+				$this->response->redirect($this->url->link('checkout/success', '', 'SSL'));
+
+			} else {
+
+				//Something Went HUGE Wrong
 				$this->redirect($this->url->link('checkout/checkout', '', 'SSL'));
 				$this->log->write('ccavenue :: ISSUE IN ORDER ID ');
-			
+
 			}
-			
-			
+		}else {
+				$this->redirect($this->url->link('checkout/checkout', '', 'SSL'));
+				$this->log->write('ccavenue :: ISSUE IN ORDER ID ');
 		}
+	}
 	 
 }
 ?>
