@@ -291,4 +291,197 @@
 
     <!-- Downloads Upload & Auto-Complete Restriction ENDS-->
 
+
+    <!-- Dashboard Elements Restrict Data Calculations based on Seller -->
+
+    <file name="admin/controller/extension/dashboard/order.php">
+        <operation>
+            <search position="replace" offset="2"><![CDATA[
+                $today = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+            ]]></search>
+            <add><![CDATA[
+                     if($this->user->isSeller())
+                     {
+
+                         $today = $this->model_sale_order->getTotalOrdersOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+                         $yesterday = $this->model_sale_order->getTotalOrdersOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }else{
+
+                        $today = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+		                $yesterday = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $order_total = $this->model_sale_order->getTotalOrders();
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $order_total = $this->model_sale_order->getTotalOrdersOfSeller();
+                }else{
+                    $order_total = $this->model_sale_order->getTotalOrders();
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+            	public function getTotalOrders($data = array()) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalOrdersOfSeller($data = array())
+                {
+                    $sql = "SELECT COUNT(o.order_id) AS total FROM `" . DB_PREFIX . "order` AS o LEFT OUTER JOIN " . DB_PREFIX . "order_product op ON (op.order_id = o.order_id) LEFT OUTER JOIN " . DB_PREFIX . "product p ON (p.product_id = op.product_id)";
+
+                    if (isset($data['filter_order_status'])) {
+                        $implode = array();
+
+                        $order_statuses = explode(',', $data['filter_order_status']);
+
+                        foreach ($order_statuses as $order_status_id) {
+                            $implode[] = "o.order_status_id = '" . (int)$order_status_id . "'";
+                        }
+
+                        if ($implode) {
+                            $sql .= " WHERE (" . implode(" OR ", $implode) . ")";
+                        }
+                    } else {
+                        $sql .= " WHERE o.order_status_id > '0'";
+                    }
+
+                    if (!empty($data['filter_order_id'])) {
+                        $sql .= " AND o.order_id = '" . (int)$data['filter_order_id'] . "'";
+                    }
+
+                    if (!empty($data['filter_customer'])) {
+                        $sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+                    }
+
+                    if (!empty($data['filter_date_added'])) {
+                        $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+                    }
+
+                    if (!empty($data['filter_date_modified'])) {
+                        $sql .= " AND DATE(o.date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
+                    }
+
+                    if (!empty($data['filter_total'])) {
+                        $sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
+                    }
+
+                    $sql .= " AND p.seller_id = '".$this->user->getId()."' ";
+
+                    $query = $this->db->query($sql);
+
+                    return $query->row['total'];
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+    <file name="admin/controller/extension/dashboard/sale.php">
+        <operation>
+            <search position="replace" offset="2"><![CDATA[
+                $today = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+            ]]></search>
+            <add><![CDATA[
+                     if($this->user->isSeller())
+                     {
+                         $today = $this->model_report_sale->getTotalSalesOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+                         $yesterday = $this->model_report_sale->getTotalSalesOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }else{
+
+                        $today = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+                        $yesterday = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $sale_total = $this->model_report_sale->getTotalSales();
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $sale_total = $this->model_report_sale->getTotalSalesOfSeller();
+                }else{
+                    $sale_total = $this->model_report_sale->getTotalSales();
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/report/sale.php">
+        <operation>
+            <search position="before"><![CDATA[
+            	public function getTotalSales($data = array()) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalSalesOfSeller($data = array())
+                {
+                    $sql = "SELECT SUM(o.total) AS total FROM `" . DB_PREFIX . "order` AS o LEFT OUTER JOIN " . DB_PREFIX . "order_product op ON (op.order_id = o.order_id) LEFT OUTER JOIN " . DB_PREFIX . "product p ON (p.product_id = op.product_id) WHERE o.order_status_id > '0'";
+
+                    if (!empty($data['filter_date_added'])) {
+                        $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+                    }
+
+                    $sql .= " AND p.seller_id = '".$this->user->getId()."' ";
+
+                    $query = $this->db->query($sql);
+
+                    return $query->row['total'];
+
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/column_left.tpl">
+        <operation>
+            <search position="replace">
+                <![CDATA[
+                     <div id="stats">
+                ]]>
+            </search>
+            <add><![CDATA[
+                    <div id="stats" class="<?php if($is_seller) { ?>hidden<?php } ?> ">
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/column_left.php">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                    // Stats
+                ]]>
+            </search>
+            <add><![CDATA[
+                    if($this->user->isSeller())
+                    {
+                        $data['is_seller'] = true;
+                    }else{
+                        $data['is_seller'] = false;
+                    }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Dashboard Elements Restrict Data Calculations based on Seller ENDS-->
+
+
 </modification>
