@@ -1,0 +1,95 @@
+<modification>
+    <id>Order Digital Download Changes</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!-- Add Download Links to Order E-Mail -->
+
+    <file name="catalog/model/checkout/order.php">
+
+        <operation>
+
+            <search position="after">
+                <![CDATA[
+                    'quantity' => $product['quantity'],
+                ]]>
+            </search>
+            <add><![CDATA[
+                'download' => $remote_url,
+            ]]></add>
+
+        </operation>
+
+        <operation>
+
+            <search position="before">
+                <![CDATA[
+                    $data['products'][] = array(
+                ]]>
+            </search>
+            <add><![CDATA[
+                    $order_download_query = $this->db->query("SELECT d.remote_url as remote_url FROM order_product AS op LEFT OUTER JOIN product_to_download ptd ON (op.product_id = ptd.product_id) LEFT OUTER JOIN download d ON (d.download_id = ptd.download_id) WHERE op.order_id = '".(int)$order_id."' AND ptd.product_id = '".$product['product_id']."' LIMIT 1;");
+                    $remote_url = $order_download_query->row['remote_url'];
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/default/template/mail/order.tpl">
+
+        <operation>
+            <search position="replace" offset="-1">
+                <![CDATA[
+                    <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;"><?php echo $product['model']; ?></td>
+                ]]>
+            </search>
+            <add><![CDATA[
+                <?php } ?>
+                <!-- Check for Download URL -->
+                <?php if(isset($product['download']) && !empty($product['download'])) { ?> &nbsp; - <a href="<?php echo $product['download']; ?>" > Download Design </a> <?php } ?>
+                </td>
+                <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;"><?php echo $product['model']; ?></td>
+            ]]></add>
+        </operation>
+
+    </file>
+
+
+    <!-- Add Download Links to Order E-Mail ENDS-->
+
+
+    <!-- Change Download Links in Account/Downloads Section to point to DROPBOX -->
+
+    <file name="catalog/controller/account/download.php">
+
+        <operation>
+            <search position="replace"><![CDATA[
+                'href'       => $this->url->link('account/download/download', 'download_id=' . $result['download_id'], true)
+            ]]></search>
+            <add><![CDATA[
+                'href'       => (!empty($result['remote_url']) ?  $result['remote_url'] : $this->url->link('account/download/download', 'download_id=' . $result['download_id'], true))
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/model/account/download.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                d.filename
+            ]]></search>
+            <add><![CDATA[
+                d.filename, d.remote_url
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Change Download Links in Account/Downloads Section to point to DROPBOX ENDS-->
+
+
+
+
+</modification>
