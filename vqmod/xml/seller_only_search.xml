@@ -131,7 +131,8 @@
                         $json['filename'] = $file;
                         $json['mask'] = $filename;
 
-                        $json['success'] = $this->language->get('text_upload');
+                        $json['success'] = 'Your file was successfully uploaded!';
+
                     }
                 }else{
 
@@ -141,7 +142,7 @@
                    $json['filename'] = $file;
                    $json['mask'] = $filename;
 
-                   $json['success'] = $this->language->get('text_upload');
+                   $json['success'] = 'Your file was successfully uploaded!';
 
                 }
 
