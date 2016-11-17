@@ -211,7 +211,8 @@
                 <add><![CDATA[
                    $_['error_product_category']            = 'Please select at-least one category for your Product!';
                    $_['error_diamond_weight']            = 'Please enter Diamond Weight for your Product!';
-                   $_['error_product_download']            = 'Please select at-least one File Uploads for your Product!';
+                   $_['error_product_download']            = 'Please select one File Uploads for your Product!';
+                   $_['error_product_download_count']            = 'Please select only one File Uploads for your Product!';
                    $_['error_price']            = 'Please enter Price for your Product!';
                 ]]></add>
             </operation>
@@ -233,6 +234,7 @@
                 $data['error_product_category'] = $this->language->get('error_product_category');
                 $data['error_diamond_weight'] = $this->language->get('error_diamond_weight');
                 $data['error_product_download'] = $this->language->get('error_product_download');
+                $data['error_product_download_count'] = $this->language->get('error_product_download_count');
                 $data['error_price'] = $this->language->get('error_price');
                 ]]></add>
             </operation>
@@ -317,10 +319,18 @@
 
                       if(!empty($this->request->post['product_download']))
                         {
-                            foreach($this->request->post['product_download'] as $download_id)
+                            if(count($this->request->post['product_download']) > 1)
                             {
-                                if (empty($download_id)) {
-                                    $this->error['product_download'] = $this->language->get('error_product_download');
+                                $this->error['product_download'] = $this->language->get('error_product_download_count');
+
+                            } else {
+
+                                foreach($this->request->post['product_download'] as $download_id)
+                                {
+                                    if (empty($download_id))
+                                    {
+                                        $this->error['product_download'] = $this->language->get('error_product_download');
+                                    }
                                 }
                             }
                         }
