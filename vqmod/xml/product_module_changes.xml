@@ -43,6 +43,7 @@
                             $('input:radio[name="shipping"]').parents('div.form-group').hide();
                             $('input:radio[name="shipping"][value="0"]').prop('checked','checked');
                             $('#input-model').val("<?php echo time(); ?>");
+                            $('#input-quantity').val("1000000");
 
                             // Auto-Populate No. Of Parts field in-case of EDIT
                             <?php if(!empty($tone_count)) { ?>
