@@ -135,6 +135,14 @@
                 'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
+        <operation>
+            <search position="after"><![CDATA[
+                'filter_model' => $filter_model,
+            ]]></search>
+            <add><![CDATA[
+                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
+            ]]></add>
+        </operation>
 
     </file>
 
@@ -144,7 +152,7 @@
                 if (isset($data['filter_image']) && !is_null($data['filter_image'])) {
             ]]></search>
             <add><![CDATA[
-                if (isset($data['filter_seller']) && !is_null($data['filter_seller'])) {
+                if (isset($data['filter_seller']) && !empty($data['filter_seller'])) {
                         $sql .= " AND p.seller_id = '" . (int)$data['filter_seller'] . "'";
                 }
             ]]></add>
