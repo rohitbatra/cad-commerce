@@ -55,7 +55,7 @@
 
 	echo "</center>";
 ?>
-<form method="post" name="redirect" action="http://www.sezplus.com/cad/index.php?route=account/seller/success">
+<form method="post" name="redirect" action="https://sezplus.com/cad/index.php?route=account/seller/success">
 <?php
 	foreach ($postArr as $var => $val)
 	{

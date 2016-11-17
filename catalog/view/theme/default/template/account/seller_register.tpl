@@ -247,8 +247,8 @@
     <input type="text" name="order_id" value=""/>
     <input type="text" name="amount" value="1.00"/>
     <input type="text" name="currency" value="INR"/>
-    <input type="text" name="redirect_url" value="http://www.sezplus.com/cad/ccavenue/ccavResponseHandler.php"/>
-    <input type="text" name="cancel_url" value="http://www.sezplus.com/cad/index.php?route=account/seller/register"/>
+    <input type="text" name="redirect_url" value="https://sezplus.com/cad/ccavenue/ccavResponseHandler.php"/>
+    <input type="text" name="cancel_url" value="https://sezplus.com/cad/index.php?route=account/seller/register"/>
     <input type="text" name="language" value="EN"/>
 </form>
 
