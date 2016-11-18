@@ -297,7 +297,27 @@
             ]]></add>
         </operation>
 
+        <!-- Disable New / Delete Sales Order by Seller -->
+        <operation>
+            <search position="replace"><![CDATA[
+                <a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+            ]]></search>
+            <add><![CDATA[
+                <a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-plus"></i></a>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <button type="button" id="button-delete" form="form-order" formaction="<?php echo $delete; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            ]]></search>
+            <add><![CDATA[
+                <button type="button" id="button-delete" form="form-order" formaction="<?php echo $delete; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-trash-o"></i></button>
+            ]]></add>
+        </operation>
+
     </file>
+
     <file name="admin/view/template/sale/order_info.tpl">
 
         <operation>
@@ -308,6 +328,16 @@
             <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
             ]]></add>
         </operation>
+
+        <operation>
+            <search position="replace" index="2"><![CDATA[
+              <div class="col-md-4">
+            ]]></search>
+            <add><![CDATA[
+            <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
+            ]]></add>
+        </operation>
+
 
         <operation>
             <search position="replace" index="1"><![CDATA[
@@ -570,6 +600,54 @@
         </operation>
     </file>
     <!-- Add a new Filter on Product List page for ADMIN ENDS-->
+
+    <!-- Show Seller Username on Sales Order Info Page per product ADMIN -->
+    <file name="admin/view/template/sale/order_info.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+            <td class="text-left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
+            ]]></search>
+            <add><![CDATA[
+            <?php if(!$is_seller) { if(!empty($product['seller_username'])) { ?>  <small>  -||-  <a href="<?php echo $product['seller_href']; ?>"><?php echo $product['seller_username']; ?></a></small>  <?php } } ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+            public function getTotalEmailsByProductsOrdered($products) {
+            ]]></search>
+            <add><![CDATA[
+            public function getSellerDetails($data) {
+
+                $sql = "SELECT u.{$data['searchFor']} FROM `" . DB_PREFIX . "user` as u LEFT OUTER JOIN `" . DB_PREFIX . "product` p ON (p.seller_id = u.user_id) WHERE p.product_id = '" . (int)$data['product_id'] . "'";
+
+                $query = $this->db->query($sql);
+
+                if($this->db->countAffected() > 0)
+                {
+                    return ($query->row[$data['searchFor']]);
+                } else {
+                    return 0;
+                }
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+            'href'     		   => $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], true)
+            ]]></search>
+            <add><![CDATA[
+            'seller_username' => $this->model_sale_order->getSellerDetails(array('product_id' => $product['product_id'], 'searchFor' => 'username')),
+            'seller_href' => $this->url->link('user/user/edit', 'token=' . $this->session->data['token'] . '&user_id=' . $this->model_sale_order->getSellerDetails(array('product_id' => $product['product_id'], 'searchFor' => 'user_id')), true),
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Show Seller Username on Sales Order Info Page per product ADMIN ENDS-->
 
 
 </modification>
