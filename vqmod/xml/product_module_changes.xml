@@ -50,6 +50,9 @@
                                 $('#input-tone-count').val('<?php echo $tone_count; ?>');
                             <?php } ?>
 
+                            <?php if(!empty($created_using)) { ?>
+                                $('#input-created-using').val('<?php echo $created_using; ?>');
+                            <?php } ?>
 
                             $('#input-name1').on('change', function() {
                                 $('#input-meta-title1').val($(this).val());
@@ -103,6 +106,19 @@
                         <option value="three_tone"><?php echo 'Three Tone'; ?></option>
                         <option value="four_tone"><?php echo 'Four Tone'; ?></option>
                     </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-created-using"><?php echo $entry_created_using; ?></label>
+                    <div class="col-sm-10">
+                      <select name="created_using" id="input-created-using" class="form-control">
+                        <option value="matrix"><?php echo 'Matrix'; ?></option>
+                        <option value="rhino"><?php echo 'Rhino 3D'; ?></option>
+                        <option value="jewel_cad"><?php echo 'JewelCAD'; ?></option>
+                        <option value="j_cad"><?php echo 'JCAD'; ?></option>
+                        <option value="others"><?php echo 'Others'; ?></option>
+                    </select>
+                    <small>If you don't find your Application in the List, please mention it in the Product Description field. <br/> Also email us at <a href="mailto:support@sezplus.com">support@sezplus.com</a> with the name of your Application we will add it in the list. </small>
                     </div>
                   </div>
                   <div class="form-group">
@@ -201,6 +217,7 @@
                     $_['entry_diamond_weight']      = 'Diamond Wt. (Carats)';
                     $_['entry_silver_weight']      = 'Silver Weight (in Gms)';
                     $_['entry_gold_weight']      = 'Gold Weight (in Gms)';
+                    $_['entry_created_using']      = 'Design Created Using (Application)';
 
                 ]]></add>
             </operation>
@@ -232,6 +249,7 @@
                 $data['entry_diamond_weight'] = $this->language->get('entry_diamond_weight');
                 $data['entry_silver_weight'] = $this->language->get('entry_silver_weight');
                 $data['entry_gold_weight'] = $this->language->get('entry_gold_weight');
+                $data['entry_created_using'] = $this->language->get('entry_created_using');
                 $data['error_product_category'] = $this->language->get('error_product_category');
                 $data['error_diamond_weight'] = $this->language->get('error_diamond_weight');
                 $data['error_product_download'] = $this->language->get('error_product_download');
@@ -284,6 +302,14 @@
                         $data['tone_count'] = $product_info['tone_count'];
                     } else {
                         $data['tone_count'] = '';
+                    }
+                    // Created Using Software
+                    if (isset($this->request->post['created_using'])) {
+                        $data['created_using'] = $this->request->post['created_using'];
+                    } elseif (!empty($product_info)) {
+                        $data['created_using'] = $product_info['created_using'];
+                    } else {
+                        $data['created_using'] = '';
                     }
                 ]]></add>
             </operation>
@@ -388,7 +414,7 @@
                     sku = '" . $this->db->escape($data['sku']) . "'
                 ]]></search>
                 <add><![CDATA[
-                    sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "'
+                    sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "' , created_using = '" . $this->db->escape($data['created_using']) . "'
                 ]]></add>
             </operation>
 
