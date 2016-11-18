@@ -296,6 +296,7 @@
                 $data['diamond_weight'] = $product_info['diamond_weight'];
                 $data['tone_count'] = $product_info['tone_count'];
                 $data['parts_count'] = $product_info['parts_count'];
+                $data['created_using'] = $product_info['created_using'];
                 $data['length'] = number_format($product_info['length'],3);
 				$data['width'] = number_format($product_info['width'],3);
 				$data['height'] = number_format($product_info['height'],3);
@@ -315,6 +316,7 @@
                 'diamond_weight' => number_format($query->row['diamond_weight'],3),
                 'tone_count' => $query->row['tone_count'],
                 'parts_count' => $query->row['parts_count'],
+                'created_using' => $query->row['created_using'],
                 'length_class' => $query->row['length_class'],
             ]]></add>
         </operation>
@@ -395,39 +397,81 @@
             <div class="tab-pane active" id="tab-description">
 
                 <?php echo $description; ?>
+
                 <hr/>
-                <?phpif(!empty($diamond_weight) && ($diamond_weight !== '0.000') ) { ?>
-                    <p><label>Diamond Wt. (in Carats) :</label> <?php echo $diamond_weight; ?></p>
-                <?php //} ?>
 
-                <?php if(!empty($gold_weight) && ($gold_weight !== '0.000')) { ?>
-                    <p><label>Gold Wt. (in Gms) :</label> <?php echo $gold_weight; ?></p>
-                <?php } ?>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td colspan="2"> <strong>Specifications</strong> </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php if(!empty($diamond_weight) && ($diamond_weight !== '0.000') ) { ?>
+                        <tr>
+                            <td>Diamond Wt. (in Carats)</td>
+                            <td><?php echo $diamond_weight; ?></td>
+                        </tr>
+                    <?php } ?>
 
-                <?php if(!empty($silver_weight) && ($silver_weight !== '0.000')) { ?>
-                    <p><label>Silver Wt. (in Gms) :</label> <?php echo $silver_weight; ?></p>
-                <?php } ?>
+                    <?php if(!empty($gold_weight) && ($gold_weight !== '0.000')) { ?>
+                        <tr>
+                            <td>Gold Wt. (in Gms)</td>
+                            <td><?php echo $gold_weight; ?></td>
+                        </tr>
+                    <?php } ?>
 
-                <?php if(!empty($parts_count) ) { ?>
-                    <p><label>No. Of Parts :</label> <?php echo $parts_count; ?></p>
-                <?php } ?>
+                    <?php if(!empty($silver_weight) && ($silver_weight !== '0.000')) { ?>
+                        <tr>
+                            <td>Silver Wt. (in Gms)</td>
+                            <td><?php echo $silver_weight; ?></td>
+                        </tr>
+                    <?php } ?>
 
-                <?php if(!empty($tone_count)) { ?>
-                    <p><label>Tone Like :</label> <?php echo ucwords(str_replace('_',' ',$tone_count)); ?></p>
-                <?php } ?>
+                    <?php if(!empty($parts_count) ) { ?>
+                        <tr>
+                            <td>No. Of Parts </td>
+                            <td><?php echo $parts_count; ?></td>
+                        </tr>
+                    <?php } ?>
 
-                <?php if(!empty($length)) { ?>
-                    <p><label>Length (in <?php echo $length_class; ?>):</label> <?php echo $length; ?></p>
-                <?php } ?>
+                    <?php if(!empty($tone_count)) { ?>
+                        <tr>
+                            <td>Tone Like</td>
+                            <td><?php echo ucwords(str_replace('_',' ',$tone_count)); ?></td>
+                        </tr>
+                    <?php } ?>
 
-                <?php if(!empty($width)) { ?>
-                    <p><label>Width (in <?php echo $length_class; ?>):</label> <?php echo $width; ?></p>
-                <?php } ?>
+                    <?php if(!empty($created_using) && ($created_using !== 'others' )) { ?>
+                        <tr>
+                            <td>Design Created Using (Application)</td>
+                            <td><?php echo ucwords(str_replace('_',' ',$created_using)); ?></td>
+                        </tr>
+                    <?php } ?>
 
-                <?php if(!empty($height)) { ?>
-                    <p><label>Height (in <?php echo $length_class; ?>):</label> <?php echo $height; ?></p>
-                <?php } ?>
+                    <?php if(!empty($length)) { ?>
+                        <tr>
+                            <td>Length (in <?php echo $length_class; ?>)</td>
+                            <td><?php echo $length; ?></td>
+                        </tr>
+                    <?php } ?>
 
+                    <?php if(!empty($width)) { ?>
+                        <tr>
+                            <td>Width (in <?php echo $length_class; ?>)</td>
+                            <td><?php echo $width; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php if(!empty($height)) { ?>
+                        <tr>
+                            <td>Height (in <?php echo $length_class; ?>)</td>
+                            <td><?php echo $height; ?></td>
+                        </tr>
+                    <?php } ?>
+
+                    </tbody>
+                </table>
             </div>
             ]]></add>
         </operation>
