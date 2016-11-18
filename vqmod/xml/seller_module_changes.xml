@@ -84,30 +84,6 @@
 
     <!-- Remove Search functions from Seller/Product pane -->
 
-    <file name="admin/view/template/catalog/product_list.tpl">
-        <operation>
-            <search position="before"><![CDATA[
-                <?php echo $footer; ?>
-            ]]></search>
-
-            <add><![CDATA[
-                    <?php /* if($is_seller) { */ ?>
-                         <script type="text/javascript"><!--
-                            $(window).load(function() {
-
-                                // array of fields to not show
-                                var fields = ['input-status','input-quantity','input-image','input-model'];
-                                $.each(fields, function (index, value) {
-                                    $('#'+value).parents('div.form-group').hide();
-                                });
-
-                            });
-                        //--></script>
-                    <?php /* } */ ?>
-            ]]></add>
-        </operation>
-    </file>
-
     <file name="admin/controller/catalog/product.php">
         <operation>
             <search position="after"><![CDATA[
@@ -132,7 +108,7 @@
                 'filter_image'    => $filter_image,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
+                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
             ]]></add>
         </operation>
         <operation>
@@ -140,7 +116,7 @@
                 'filter_model' => $filter_model,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
+                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
             ]]></add>
         </operation>
 
@@ -506,6 +482,7 @@
             ]]></search>
             <add><![CDATA[
                 $_['entry_download']         = 'Uploads';
+                $_['entry_seller']         = 'Seller';
             ]]></add>
         </operation>
     </file>
@@ -540,5 +517,59 @@
         </operation>
     </file>
     <!-- Hide Extra Fees from Seller Sales Order View ENDS-->
+
+    <!-- Add a new Filter on Product List page for ADMIN -->
+
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="before"><![CDATA[
+            $pagination = new Pagination();
+            ]]></search>
+            <add><![CDATA[
+                $data['entry_seller'] = $this->language->get('entry_seller');
+                // Get Seller List
+                $this->load->model('user/user');
+                $data['sellers'] = $this->model_user_user->getSellers();
+                $data['is_seller'] = false;
+                if($this->user->isSeller())
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+                $data['filter_image'] = $filter_image;
+            ]]></search>
+            <add><![CDATA[
+                if (isset($this->request->get['filter_seller'])) {
+                    $filter_seller = $this->request->get['filter_seller'];
+                } else {
+                    $filter_seller = null;
+                }
+
+                $data['filter_seller'] = $filter_seller;
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/model/user/user.php">
+        <operation>
+            <search position="before"><![CDATA[
+                public function getTotalUsers() {
+            ]]></search>
+            <add><![CDATA[
+                public function getSellers() {
+
+                    $query = $this->db->query("SELECT u.user_id, u.username, u.firstname, u.lastname, u.email, u.status, ug.name as user_group_name FROM `" . DB_PREFIX . "user` AS u LEFT OUTER JOIN `" . DB_PREFIX . "user_group` ug ON (ug.user_group_id = u.user_group_id) WHERE ug.user_group_id = '11' ");
+
+                    return $query->rows;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Add a new Filter on Product List page for ADMIN ENDS-->
+
 
 </modification>
