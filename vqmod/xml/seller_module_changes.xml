@@ -213,6 +213,20 @@
                 'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $order_total = $this->model_sale_order->getTotalOrders($filter_data);
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $order_total = $this->model_sale_order->getTotalOrdersOfSeller($filter_data);
+                }else{
+                    $order_total = $this->model_sale_order->getTotalOrders($filter_data);
+
+                }
+            ]]></add>
+        </operation>
     </file>
 
     <file name="admin/model/sale/order.php">
@@ -221,25 +235,80 @@
                 $sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o";
             ]]></search>
             <add><![CDATA[
-                $sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o LEFT OUTER JOIN `order_product` AS op
-                    ON (o.order_id = op.order_id)
-                    LEFT OUTER JOIN `product` AS p
-                    ON (p.product_id = op.product_id)
+                $sql = "SELECT DISTINCT(o.order_id), CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o
+                        LEFT OUTER JOIN `order_product` AS op
+                        ON (o.order_id = op.order_id)
+                        LEFT OUTER JOIN `product` AS p
+                        ON (p.product_id = op.product_id)
                     ";
             ]]></add>
         </operation>
 
         <operation>
             <search position="replace"><![CDATA[
-                $sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order`";
+                public function getTotalOrders($data = array()) {
             ]]></search>
             <add><![CDATA[
-                $sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` o
-                    LEFT OUTER JOIN `order_product` AS op
-                    ON (o.order_id = op.order_id)
-                    LEFT OUTER JOIN `product` AS p
-                    ON (p.product_id = op.product_id)
-                    ";
+                public function getTotalOrdersOld($data = array()) {
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+                public function getOrderTotals($order_id) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalOrders($data = array())
+                {
+                    $sql = "SELECT COUNT(DISTINCT(o.order_id)) AS total FROM `" . DB_PREFIX . "order` AS o
+                            /* LEFT OUTER JOIN `" . DB_PREFIX . "order_product` op
+                            ON (op.order_id = o.order_id)
+                            LEFT OUTER JOIN `" . DB_PREFIX . "product` p
+                            ON (p.product_id = op.product_id)
+                            */
+                            ";
+
+                    if (isset($data['filter_order_status'])) {
+                        $implode = array();
+
+                        $order_statuses = explode(',', $data['filter_order_status']);
+
+                        foreach ($order_statuses as $order_status_id) {
+                            $implode[] = "o.order_status_id = '" . (int)$order_status_id . "'";
+                        }
+
+                        if ($implode) {
+                            $sql .= " WHERE (" . implode(" OR ", $implode) . ")";
+                        }
+                    } else {
+                        $sql .= " WHERE o.order_status_id > '0'";
+                    }
+
+                    if (!empty($data['filter_order_id'])) {
+                        $sql .= " AND o.order_id = '" . (int)$data['filter_order_id'] . "'";
+                    }
+
+                    if (!empty($data['filter_customer'])) {
+                        $sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+                    }
+
+                    if (!empty($data['filter_date_added'])) {
+                        $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+                    }
+
+                    if (!empty($data['filter_date_modified'])) {
+                        $sql .= " AND DATE(o.date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
+                    }
+
+                    if (!empty($data['filter_total'])) {
+                        $sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
+                    }
+
+                    $query = $this->db->query($sql);
+
+                    return $query->row['total'];
+                }
+
             ]]></add>
         </operation>
 
