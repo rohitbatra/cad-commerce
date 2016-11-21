@@ -245,7 +245,7 @@
     <input type="text" name="tid" id="tid" value="<?php echo strtotime(date('d-m-Y h:m:s')) ?>" readonly />
     <input type="text" name="merchant_id" value="93868"/>
     <input type="text" name="order_id" value=""/>
-    <input type="text" name="amount" value="1.00"/>
+    <input type="text" name="amount" value="500.00"/>
     <input type="text" name="currency" value="INR"/>
     <input type="text" name="redirect_url" value="https://sezplus.com/cad/ccavenue/ccavResponseHandler.php"/>
     <input type="text" name="cancel_url" value="https://sezplus.com/cad/index.php?route=account/seller/register"/>
