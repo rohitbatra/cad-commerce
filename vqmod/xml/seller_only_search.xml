@@ -121,7 +121,7 @@
                     $this->load->model('catalog/download');
                     $cnt = $this->model_catalog_download->getTotalDownloads($user_id);
 
-                    if($cnt > '120')
+                    if($cnt > '120000')
                     {
                         $json['error'] = "You've Reached the maximum file uploads limit. Please write to us at support@sezplus.com to raise this limit.";
 
