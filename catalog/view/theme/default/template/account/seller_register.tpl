@@ -240,7 +240,7 @@
 </div>
 <?php } ?>
 </form>
-
+<!--
 <form method="post" name="customerData" action="ccavenue/ccavRequestHandler.php" style="display: none;">
     <input type="text" name="tid" id="tid" value="<?php echo strtotime(date('d-m-Y h:m:s')) ?>" readonly />
     <input type="text" name="merchant_id" value="93868"/>
@@ -251,7 +251,7 @@
     <input type="text" name="cancel_url" value="https://sezplus.com/cad/index.php?route=account/seller/register"/>
     <input type="text" name="language" value="EN"/>
 </form>
-
+-->
 <?php echo $content_bottom; ?></div>
 <?php echo $column_right; ?></div>
 </div>
@@ -327,7 +327,8 @@
                 {
                     // Now Redirect to Payment Processor Page with another Hidden Form Fields
                     $('input[name="order_id"]').val("SEZCAD" + seller_id);
-                    $("form[name='customerData']").submit();
+                    //$("form[name='customerData']").submit();
+                    window.location.href = "https://sezplus.com/cad/index.php?route=account/seller/success&seller_id=SEZCAD"+seller_id;
                 }
             });
 

@@ -112,7 +112,7 @@ class ControllerAccountSeller extends Controller {
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate())
         {
             $seller_id = $this->model_account_seller->addSeller($this->request->post);
-           
+
             echo $seller_id;
             return;
        }
@@ -512,71 +512,110 @@ class ControllerAccountSeller extends Controller {
     public function success()
     {
 
-        $postData = $this->request->post;
-        $postData['user_id'] = str_replace('SEZCAD','',$postData['orderNo']);
-
-        // Now call the Model & Store all the Data with Status
-        $this->load->model('account/seller');
-        $this->load->language('account/seller_success');
-
-        $this->model_account_seller->addPaymentInfo($postData);
-
-        // Redirect to Page w.r.t $postData['order_status']
-        $this->load->language('account/seller_success');
-        $data['heading_title'] = $this->language->get('heading_title');
-        $data['heading_title_error'] = $this->language->get('heading_title_error');
-        $data['text_message'] = $this->language->get('text_message');
-        $data['text_error_message'] = $this->language->get('text_error_message');
-        $data['text_approval'] = $this->language->get('text_approval');
-        $data['text_account'] = $this->language->get('text_account');
-        $data['button_continue'] = $this->language->get('button_continue');
-
-        if($postData['order_status'] == "Success")
+        if(isset($this->request->get['seller_id']) && !empty($this->request->get['seller_id']))
         {
-            $this->model_account_seller->approveSeller(array('user_id' => $postData['user_id']));
-            $this->model_account_seller->sendEmail($postData);
-            
-            // To Seller Success TPL
-            $this->document->setTitle($data['heading_title']);
+          // GET
+          $getData = $this->request->get;
+          $getData['user_id'] = str_replace('SEZCAD','',$getData['seller_id']);
 
-            $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
-            $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
-            $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+          // Redirect to Page w.r.t $postData['order_status']
+          $this->load->language('account/seller_success');
+          $data['heading_title'] = $this->language->get('heading_title');
+          $data['heading_title_error'] = $this->language->get('heading_title_error');
+          $data['text_message'] = $this->language->get('text_message');
+          $data['text_error_message'] = $this->language->get('text_error_message');
+          $data['text_approval'] = $this->language->get('text_approval');
+          $data['text_account'] = $this->language->get('text_account');
+          $data['button_continue'] = $this->language->get('button_continue');
 
-            $data['continue'] = $this->url->link('account/seller/login');
-            $data['column_left'] = $this->load->controller('common/column_left');
-            $data['column_right'] = $this->load->controller('common/column_right');
-            $data['content_top'] = $this->load->controller('common/content_top');
-            $data['content_bottom'] = $this->load->controller('common/content_bottom');
-            $data['footer'] = $this->load->controller('common/footer');
-            $data['header'] = $this->load->controller('common/header');
+          $this->model_account_seller->approveSeller(array('user_id' => $getData['user_id']));
+          
+          // To Seller Success TPL
+          $this->document->setTitle($data['heading_title']);
 
-            $this->response->setOutput($this->load->view('account/seller_success',$data));
-            
+          $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
+          $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+          $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+
+          $data['continue'] = $this->url->link('account/seller/login');
+          $data['column_left'] = $this->load->controller('common/column_left');
+          $data['column_right'] = $this->load->controller('common/column_right');
+          $data['content_top'] = $this->load->controller('common/content_top');
+          $data['content_bottom'] = $this->load->controller('common/content_bottom');
+          $data['footer'] = $this->load->controller('common/footer');
+          $data['header'] = $this->load->controller('common/header');
+
+          $this->response->setOutput($this->load->view('account/seller_success',$data));
+
+
         }else{
+          // POST
+          $postData = $this->request->post;
+          $postData['user_id'] = str_replace('SEZCAD','',$postData['orderNo']);
+          // Now call the Model & Store all the Data with Status
+          $this->load->model('account/seller');
+          $this->model_account_seller->addPaymentInfo($postData);
 
-            $this->model_account_seller->sendEmail($postData);
+          // Redirect to Page w.r.t $postData['order_status']
+          $this->load->language('account/seller_success');
+          $data['heading_title'] = $this->language->get('heading_title');
+          $data['heading_title_error'] = $this->language->get('heading_title_error');
+          $data['text_message'] = $this->language->get('text_message');
+          $data['text_error_message'] = $this->language->get('text_error_message');
+          $data['text_approval'] = $this->language->get('text_approval');
+          $data['text_account'] = $this->language->get('text_account');
+          $data['button_continue'] = $this->language->get('button_continue');
 
-            // To Seller Error TPL
-            $this->load->language('account/seller_success');
 
-            $this->document->setTitle($data['heading_title_error']);
+          if($postData['order_status'] == "Success")
+          {
+              $this->model_account_seller->approveSeller(array('user_id' => $postData['user_id']));
+              $this->model_account_seller->sendEmail($postData);
 
-            $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
-            $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
-            $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+              // To Seller Success TPL
+              $this->document->setTitle($data['heading_title']);
 
-            $data['continue'] = $this->url->link('information/contact');
+              $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
+              $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+              $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
-            $data['column_left'] = $this->load->controller('common/column_left');
-            $data['column_right'] = $this->load->controller('common/column_right');
-            $data['content_top'] = $this->load->controller('common/content_top');
-            $data['content_bottom'] = $this->load->controller('common/content_bottom');
-            $data['footer'] = $this->load->controller('common/footer');
-            $data['header'] = $this->load->controller('common/header');
+              $data['continue'] = $this->url->link('account/seller/login');
+              $data['column_left'] = $this->load->controller('common/column_left');
+              $data['column_right'] = $this->load->controller('common/column_right');
+              $data['content_top'] = $this->load->controller('common/content_top');
+              $data['content_bottom'] = $this->load->controller('common/content_bottom');
+              $data['footer'] = $this->load->controller('common/footer');
+              $data['header'] = $this->load->controller('common/header');
 
-            $this->response->setOutput($this->load->view('account/seller_error',$data));
+              $this->response->setOutput($this->load->view('account/seller_success',$data));
+
+          }else{
+
+              $this->model_account_seller->sendEmail($postData);
+
+              // To Seller Error TPL
+              $this->load->language('account/seller_success');
+
+              $this->document->setTitle($data['heading_title_error']);
+
+              $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
+              $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+              $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+
+              $data['continue'] = $this->url->link('information/contact');
+
+              $data['column_left'] = $this->load->controller('common/column_left');
+              $data['column_right'] = $this->load->controller('common/column_right');
+              $data['content_top'] = $this->load->controller('common/content_top');
+              $data['content_bottom'] = $this->load->controller('common/content_bottom');
+              $data['footer'] = $this->load->controller('common/footer');
+              $data['header'] = $this->load->controller('common/header');
+
+              $this->response->setOutput($this->load->view('account/seller_error',$data));
+          }
+
         }
+
     }
 
 
