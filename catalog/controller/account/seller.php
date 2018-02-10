@@ -420,7 +420,7 @@ class ControllerAccountSeller extends Controller {
         if (isset($this->request->post['selling_fees'])) {
             $data['selling_fees'] = $this->request->post['selling_fees'];
         } else {
-            $data['selling_fees'] = '500';
+            $data['selling_fees'] = '0';
         }
 
 
