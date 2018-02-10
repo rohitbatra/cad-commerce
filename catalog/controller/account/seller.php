@@ -527,9 +527,9 @@ class ControllerAccountSeller extends Controller {
           $data['text_approval'] = $this->language->get('text_approval');
           $data['text_account'] = $this->language->get('text_account');
           $data['button_continue'] = $this->language->get('button_continue');
-
+          $this->load->model('account/seller');
           $this->model_account_seller->approveSeller(array('user_id' => $getData['user_id']));
-          
+
           // To Seller Success TPL
           $this->document->setTitle($data['heading_title']);
 
