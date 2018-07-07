@@ -24,7 +24,7 @@
             ]]></search>
             <add trim="true"><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -41,7 +41,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -91,7 +91,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -108,7 +108,7 @@
                 'filter_image'    => $filter_image,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
+                'filter_seller'    => (($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
             ]]></add>
         </operation>
         <operation>
@@ -116,7 +116,7 @@
                 'filter_model' => $filter_model,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
+                'filter_seller'    => (($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
             ]]></add>
         </operation>
 
@@ -180,7 +180,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -192,7 +192,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -210,7 +210,7 @@
                 'filter_date_modified' => $filter_date_modified,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
+                'filter_seller'    => (($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2') ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
         <operation>
@@ -472,7 +472,7 @@
                 'order' => 'DESC',
             ]]></search>
             <add><![CDATA[
-                 'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
+                 'filter_seller'    => (($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2') ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
     </file>
